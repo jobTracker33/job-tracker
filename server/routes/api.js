@@ -10,11 +10,15 @@ router.post("/signup", trackerController.checkUsername, trackerController.create
     return res.sendStatus(400)
   }
   // if username is not in db
+  req.session.loggedIn = true;
+  req.session.username = res.locals.data.user.username;
   return res.status(200).json(res.locals.data);
 })
 
 // return all applications related to one user
 router.get("/login", trackerController.verifyUser, (req, res) => {
+  req.session.loggedIn = true;
+  req.session.username = res.locals.data.user.username;
   return res.status(200).json(res.locals.data)
 })
 

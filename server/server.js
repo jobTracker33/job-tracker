@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
 //github sucks
 const app = express();
 
@@ -10,6 +11,12 @@ const PORT = 3000;
 //handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+  saveUninitialized:true,
+  cookie: { maxAge: 300000 },
+  resave: false 
+}));
 
 //uses /dist for static files in webpack production mode
 console.log(process.env.NODE_ENV)
@@ -20,7 +27,11 @@ if (process.env.NODE_ENV === 'production') {
 // Hey Hank, do we need this? Seems like this would be handled with react.
 //app entry point
 app.get('/', (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+    if(req.session.loggedIn){
+      res.redirect('/dashboard')
+    } else {
+      return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+    }
 });
 
 
