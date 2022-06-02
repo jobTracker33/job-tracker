@@ -257,7 +257,7 @@ class App extends Component {
     try {
       await fetch(`/api/updateApp/${_id}`, {
         method: 'PATCH',
-        body: JSON.stringify({detailChange}),
+        body: JSON.stringify({...detailChange}),
         headers: {
           'Content-Type' : 'application/json'
         } 
